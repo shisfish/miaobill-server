@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miaobill.mapper.RecordMapper">
+    <select id="findAll" resultType="com.miaobill.entity.Record">
+        select * from record
+    </select>
+    <select id="findById" resultType="com.miaobill.entity.Record">
+        select * from record where id = #{id}
+    </select>
+    <insert id="insert" parameterType="com.miaobill.entity.Record">
+        insert into record (type, amount, category, description, create_time) values (#{type}, #{amount}, #{category}, #{description}, #{createTime})
+    </insert>
+    <update id="update" parameterType="com.miaobill.entity.Record">
+        update record set type = #{type}, amount = #{amount}, category = #{category}, description = #{description} where id = #{id}
+    </update>
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from record where id = #{id}
+    </delete>
+</mapper>
