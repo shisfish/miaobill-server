@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.miaobill.mapper.RecordMapper">
-    <select id="findAll" resultType="com.miaobill.entity.Record">
-        select * from record
+    <select id="findByUserId" resultType="com.miaobill.entity.Record">
+        select * from record where user_id = #{userId} order by date desc
     </select>
     <select id="findById" resultType="com.miaobill.entity.Record">
-        select * from record where id = #{id}
+        select * from record where id = #{id} and user_id = #{userId}
     </select>
-    <insert id="insert" parameterType="com.miaobill.entity.Record">
-        insert into record (type, amount, category, description, create_time) values (#{type}, #{amount}, #{category}, #{description}, #{createTime})
+    <insert id="insert" parameterType="com.miaobill.entity.Record" useGeneratedKeys="true" keyProperty="id">
+        insert into record (user_id, type, amount, category, description, date, create_time)
+        values (#{userId}, #{type}, #{amount}, #{category}, #{description}, #{date}, #{createTime})
     </insert>
     <update id="update" parameterType="com.miaobill.entity.Record">
-        update record set type = #{type}, amount = #{amount}, category = #{category}, description = #{description} where id = #{id}
+        update record set type = #{type}, amount = #{amount}, category = #{category}, description = #{description}, date = #{date}
+        where id = #{id} and user_id = #{userId}
     </update>
-    <delete id="delete" parameterType="java.lang.Long">
-        delete from record where id = #{id}
+    <delete id="delete">
+        delete from record where id = #{id} and user_id = #{userId}
     </delete>
+    <select id="findByDateRange" resultType="com.miaobill.entity.Record">
+        select * from record where user_id = #{userId} and date between #{startDate} and #{endDate} order by date desc
+    </select>
+    <select id="findByMonth" resultType="com.miaobill.entity.Record">
+        select * from record where user_id = #{userId} and YEAR(date) = #{year} and MONTH(date) = #{month} order by date desc
+    </select>
 </mapper>

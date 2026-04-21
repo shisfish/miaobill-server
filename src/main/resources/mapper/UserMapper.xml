@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miaobill.mapper.UserMapper">
+    <select id="findByOpenid" resultType="com.miaobill.entity.User">
+        select * from user where openid = #{openid}
+    </select>
+    <insert id="insert" parameterType="com.miaobill.entity.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user (openid, union_id, nick_name, avatar_url, gender, phone, status, create_time, update_time)
+        values (#{openid}, #{unionId}, #{nickName}, #{avatarUrl}, #{gender}, #{phone}, #{status}, #{createTime}, #{updateTime})
+    </insert>
+    <update id="update" parameterType="com.miaobill.entity.User">
+        update user set nick_name = #{nickName}, avatar_url = #{avatarUrl}, gender = #{gender},
+                        phone = #{phone}, update_time = #{updateTime}
+        where id = #{id}
+    </update>
+    <select id="findById" resultType="com.miaobill.entity.User">
+        select * from user where id = #{id}
+    </select>
+</mapper>

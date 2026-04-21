@@ -1,14 +1,22 @@
 package com.miaobill.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Record {
     private Long id;
+    private Long userId;
     private String type;
     private BigDecimal amount;
     private String category;
     private String description;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     public Long getId() {
@@ -17,6 +25,14 @@ public class Record {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getType() {
@@ -49,6 +65,14 @@ public class Record {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public LocalDateTime getCreateTime() {
