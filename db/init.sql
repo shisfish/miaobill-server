@@ -494,3 +494,15 @@ CREATE TABLE IF NOT EXISTS user (
     INDEX idx_union_id (union_id),
     INDEX idx_phone (phone)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
+
+-- 创建打卡记录表
+CREATE TABLE IF NOT EXISTS checkin_record (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    checkin_date DATE NOT NULL COMMENT '打卡日期',
+    continuous_days INT NOT NULL DEFAULT 1 COMMENT '连续打卡天数',
+    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    UNIQUE INDEX idx_user_date (user_id, checkin_date),
+    INDEX idx_user_id (user_id),
+    INDEX idx_checkin_date (checkin_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='打卡记录表';

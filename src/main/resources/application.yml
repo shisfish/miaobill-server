@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:13306/miaobill?useSSL=false&serverTimezone=UTC
-    username: root
-    password: riJ$a#qA
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:13306}/miaobill?useSSL=false&serverTimezone=UTC
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:riJ$a#qA}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -22,5 +22,9 @@ logging:
     com.miaobill: debug
 
 wechat:
-  appid: wxcd2a6d5c501e8449
-  secret: 13ad61b2f61f450f3c4e70036893e822
+  appid: ${WECHAT_APPID:wxcd2a6d5c501e8449}
+  secret: ${WECHAT_SECRET:13ad61b2f61f450f3c4e70036893e822}
+
+jwt:
+  secret: ${JWT_SECRET:miaobill-jwt-secret-key-2026}
+  expiration: ${JWT_EXPIRATION:604800000}

@@ -3,6 +3,7 @@ package com.miaobill.service.impl;
 import com.miaobill.entity.User;
 import com.miaobill.mapper.UserMapper;
 import com.miaobill.service.UserService;
+import com.miaobill.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private JwtUtil jwtUtil;
 
     @Value("${wechat.appid}")
     private String appid;
@@ -39,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User loginOrRegister(String code, String nickName, String avatarUrl, Integer gender) {
+    public Map<String, Object> loginOrRegister(String code, String nickName, String avatarUrl, Integer gender) {
         String url = String.format(
                 "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
                 appid, secret, code);
@@ -88,7 +93,15 @@ public class UserServiceImpl implements UserService {
             userMapper.update(user);
         }
 
-        return user;
+        String token = jwtUtil.generateToken(user.getId());
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("id", user.getId());
+        responseMap.put("nickName", user.getNickName());
+        responseMap.put("avatarUrl", user.getAvatarUrl());
+        responseMap.put("gender", user.getGender());
+        responseMap.put("token", token);
+        return responseMap;
     }
 
     @Override

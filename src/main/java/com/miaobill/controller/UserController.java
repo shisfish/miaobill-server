@@ -1,10 +1,10 @@
 package com.miaobill.controller;
 
+import com.miaobill.common.ApiResponse;
 import com.miaobill.entity.User;
 import com.miaobill.service.UserService;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -15,30 +15,25 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody Map<String, Object> params) {
+    public ApiResponse<Map<String, Object>> login(@RequestBody Map<String, Object> params) {
         String code = (String) params.get("code");
         String nickName = (String) params.get("nickName");
         String avatarUrl = (String) params.get("avatarUrl");
         Integer gender = params.get("gender") != null ? (Integer) params.get("gender") : 0;
 
-        User user = userService.loginOrRegister(code, nickName, avatarUrl, gender);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", user.getId());
-        result.put("nickName", user.getNickName());
-        result.put("avatarUrl", user.getAvatarUrl());
-        result.put("gender", user.getGender());
-        return result;
+        Map<String, Object> result = userService.loginOrRegister(code, nickName, avatarUrl, gender);
+        return ApiResponse.success(result);
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ApiResponse<User> getUser(@PathVariable Long id) {
+        return ApiResponse.success(userService.getUserById(id));
     }
 
     @PutMapping("/{id}")
-    public void updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ApiResponse<Void> updateUser(@PathVariable Long id, @RequestBody User user) {
         user.setId(id);
         userService.updateUser(user);
+        return ApiResponse.success(null);
     }
 }

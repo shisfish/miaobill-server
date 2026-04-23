@@ -1,5 +1,6 @@
 package com.miaobill.controller;
 
+import com.miaobill.common.ApiResponse;
 import com.miaobill.context.UserContextHolder;
 import com.miaobill.entity.Record;
 import com.miaobill.service.RecordService;
@@ -16,61 +17,64 @@ public class RecordController {
     private RecordService recordService;
 
     @GetMapping
-    public List<Record> findAll() {
+    public ApiResponse<List<Record>> findAll() {
         Long userId = UserContextHolder.getCurrentUserId();
-        return recordService.findAll(userId);
+        return ApiResponse.success(recordService.findAll(userId));
     }
 
     @GetMapping("/{id}")
-    public Record findById(@PathVariable Long id) {
+    public ApiResponse<Record> findById(@PathVariable Long id) {
         Long userId = UserContextHolder.getCurrentUserId();
-        return recordService.findById(id, userId);
+        return ApiResponse.success(recordService.findById(id, userId));
     }
 
     @PostMapping
-    public void insert(@RequestBody Record record) {
+    public ApiResponse<Void> insert(@RequestBody Record record) {
         Long userId = UserContextHolder.getCurrentUserId();
         recordService.insert(record, userId);
+        return ApiResponse.success(null);
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id, @RequestBody Record record) {
+    public ApiResponse<Void> update(@PathVariable Long id, @RequestBody Record record) {
         record.setId(id);
         Long userId = UserContextHolder.getCurrentUserId();
         recordService.update(record, userId);
+        return ApiResponse.success(null);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ApiResponse<Void> delete(@PathVariable Long id) {
         Long userId = UserContextHolder.getCurrentUserId();
         recordService.delete(id, userId);
+        return ApiResponse.success(null);
     }
 
     @GetMapping("/range")
-    public List<Record> findByDateRange(@RequestParam String startDate,
+    public ApiResponse<List<Record>> findByDateRange(@RequestParam String startDate,
                                         @RequestParam String endDate) {
         Long userId = UserContextHolder.getCurrentUserId();
-        return recordService.findByDateRange(userId, startDate, endDate);
+        return ApiResponse.success(recordService.findByDateRange(userId, startDate, endDate));
     }
 
     @GetMapping("/month/{year}/{month}")
-    public List<Record> findByMonth(@PathVariable int year,
+    public ApiResponse<List<Record>> findByMonth(@PathVariable int year,
                                     @PathVariable int month) {
         Long userId = UserContextHolder.getCurrentUserId();
-        return recordService.findByMonth(userId, year, month);
+        return ApiResponse.success(recordService.findByMonth(userId, year, month));
     }
 
     @GetMapping("/stats/month/{year}/{month}")
-    public Map<String, Object> getMonthStats(@PathVariable int year,
+    public ApiResponse<Map<String, Object>> getMonthStats(@PathVariable int year,
                                              @PathVariable int month) {
         Long userId = UserContextHolder.getCurrentUserId();
-        return recordService.getMonthStats(userId, year, month);
+        return ApiResponse.success(recordService.getMonthStats(userId, year, month));
     }
 
     @GetMapping("/stats/category/{year}/{month}")
-    public Map<String, Object> getCategoryStats(@PathVariable int year,
+    public ApiResponse<Map<String, Object>> getCategoryStats(@PathVariable int year,
                                                 @PathVariable int month) {
         Long userId = UserContextHolder.getCurrentUserId();
-        return recordService.getCategoryStats(userId, year, month);
+        return ApiResponse.success(recordService.getCategoryStats(userId, year, month));
     }
 }
